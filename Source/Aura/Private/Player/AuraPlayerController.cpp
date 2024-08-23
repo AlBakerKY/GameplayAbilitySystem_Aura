@@ -4,6 +4,7 @@
 
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
+#include "Interaction/EnemyInterface.h"
 
 AAuraPlayerController::AAuraPlayerController()
 {
@@ -39,6 +40,13 @@ void AAuraPlayerController::SetupInputComponent()
 	EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AAuraPlayerController::Move);
 }
 
+void AAuraPlayerController::PlayerTick(float DeltaTime)
+{
+	Super::PlayerTick(DeltaTime);
+
+	CursorTrace();
+}
+
 void AAuraPlayerController::Move(const FInputActionValue& InputActionValue)
 {
 	const FVector2d InputAxisVector = InputActionValue.Get<FVector2D>();
@@ -54,4 +62,50 @@ void AAuraPlayerController::Move(const FInputActionValue& InputActionValue)
 		ControlledPawn->AddMovementInput(RightDirection, InputAxisVector.X);
 		
 	}
+}
+
+void AAuraPlayerController::CursorTrace()
+{
+	FHitResult CursorHit;
+	GetHitResultUnderCursor(ECC_Visibility, false, CursorHit);
+	if (!CursorHit.bBlockingHit) {return;}
+
+	LastActor = ThisActor;
+	ThisActor = CursorHit.GetActor();
+
+	/**
+	 * Line trace from cursor, several scenarios
+	 * A. LastActor is null and ThisActor is Null
+	 *	- do nothing
+	 *	B. Last actor is null, but this actor is valid
+	 *	- highlight
+	 *	 C. Last actor is valid and this actor is null
+	 *	 - Unhighlight
+	 *	 D. Both actors are valid, but lastactor != this actors
+	 *	 - Unhighlight lastactor and highlight this actor
+	 *	 Both actors are valid
+	 *	 - do nothing
+	*/
+
+	if (LastActor == nullptr && ThisActor == nullptr)
+	{
+		
+	}
+	else if (LastActor == nullptr && ThisActor)
+	{
+		ThisActor->HighlightActor();
+	}
+	else if (LastActor && ThisActor == nullptr)
+	{
+		LastActor->UnhighlightActor();
+	}
+	else if (LastActor && ThisActor)
+	{
+		if (LastActor != ThisActor)
+		{
+			LastActor->UnhighlightActor();
+			ThisActor->HighlightActor();
+		}
+	}
+	
 }

@@ -16,4 +16,6 @@ class AURA_API AAuraCharacter : public AAuraCharacterBase
 
 public:
 	AAuraCharacter();
+
+
 };

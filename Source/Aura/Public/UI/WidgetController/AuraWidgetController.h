@@ -7,6 +7,7 @@
 #include "UObject/Object.h"
 #include "AuraWidgetController.generated.h"
 
+class UAuraAttributeSet;
 class UAttributeSet;
 class UAbilitySystemComponent;
 
@@ -39,6 +40,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void SetWidgetControllerParams(const FWidgetControllerParams& WCParams);
 	virtual void BroadcastInitialValues();
+	virtual void BindCallbacksToDependencies();
 	
 protected:
 	UPROPERTY(BlueprintReadOnly, Category="WidgetController")

@@ -26,7 +26,7 @@ void AAuraAffectActor::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActo
 		// TODO: hack, change to gameplay effect.
 		const UAuraAttributeSet* AuraAttributeSet = Cast<UAuraAttributeSet>(AbilitySystemInterface->GetAbilitySystemComponent()->GetAttributeSet(UAuraAttributeSet::StaticClass()));
 		UAuraAttributeSet* NotConstAttributeSet = const_cast<UAuraAttributeSet*> (AuraAttributeSet);
-		NotConstAttributeSet->SetHealth(AuraAttributeSet->GetHealth() + 25.f);
+		NotConstAttributeSet->SetMana(AuraAttributeSet->GetMana() - 25.f);
 		Destroy();
 	}
 }

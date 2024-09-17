@@ -17,6 +17,14 @@ void AAuraAffectActor::BeginPlay()
 	Super::BeginPlay();
 }
 
+void AAuraAffectActor::OnOverlap(AActor* TargetActor)
+{
+}
+
+void AAuraAffectActor::OnEndOverlap(AActor* TargetActor)
+{
+}
+
 void AAuraAffectActor::ApplyEffectToTarget(AActor* TargetActor, TSubclassOf<UGameplayEffect> GameplayEffectClass)
 {
 	if (UAbilitySystemComponent* TargetAbilitySystemComponent = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(TargetActor))

@@ -78,7 +78,7 @@ void AAuraAffectActor::ApplyEffectToTarget(AActor* TargetActor, TSubclassOf<UGam
 		FGameplayEffectContextHandle EffectContextHandle = TargetAbilitySystemComponent->MakeEffectContext();
 		EffectContextHandle.AddSourceObject(this);
 		const FGameplayEffectSpecHandle GameplayEffectSpecHandle = TargetAbilitySystemComponent->MakeOutgoingSpec(
-			GameplayEffectClass, 1.0f, EffectContextHandle);
+			GameplayEffectClass, ActorLevel, EffectContextHandle);
 		FActiveGameplayEffectHandle ActiveEffectHandle = TargetAbilitySystemComponent->ApplyGameplayEffectSpecToSelf(
 			*GameplayEffectSpecHandle.Data.Get());
 		//	TargetAbilitySystemComponent->ApplyGameplayEffectSpecToSelf()

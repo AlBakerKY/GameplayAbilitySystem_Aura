@@ -25,6 +25,6 @@ public:
 	AAuraPlayerState* AuraPlayerState;
 
 private:
-	void InitAbilityActorInfo();
+	virtual void InitAbilityActorInfo() override;
 	
 };

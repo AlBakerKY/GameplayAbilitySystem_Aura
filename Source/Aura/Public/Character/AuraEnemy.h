@@ -23,4 +23,7 @@ public:
 
 	UPROPERTY(BlueprintReadWrite)
 	bool isHighlighted;
+
+protected:
+	virtual void InitAbilityActorInfo() override;
 };

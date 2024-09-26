@@ -9,10 +9,10 @@
 void UOverlayWidgetController::BroadcastInitialValues()
 {
 	UAuraAttributeSet* AttributeSetCasted = CastChecked<UAuraAttributeSet>(AttributeSet);
-		OnHealthChanged.Broadcast(AttributeSetCasted->GetHealth());
-		OnMaxHealthChanged.Broadcast(AttributeSetCasted->GetMaxHealth());
-		OnManaChanged.Broadcast(AttributeSetCasted->GetMana());
-		OnMaxManaChanged.Broadcast(AttributeSetCasted->GetMaxMana());
+	OnHealthChanged.Broadcast(AttributeSetCasted->GetHealth());
+	OnMaxHealthChanged.Broadcast(AttributeSetCasted->GetMaxHealth());
+	OnManaChanged.Broadcast(AttributeSetCasted->GetMana());
+	OnMaxManaChanged.Broadcast(AttributeSetCasted->GetMaxMana());
 
 	// 	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(AttributeSet->GetHealthAttribute()).AddUObject(this, )
 }
@@ -32,15 +32,21 @@ void UOverlayWidgetController::BindCallbacksToDependencies()
 	Cast<UAuraAbilitySystemComponent>(AbilitySystemComponent)->EffectAssetTags.AddLambda(
 		[this](const FGameplayTagContainer& AssetTags)
 		{
-			for (const FGameplayTag Tag:AssetTags)
+			for (const FGameplayTag Tag : AssetTags)
 			{
-				const FString Msg = FString::Printf(TEXT("GE Tage: %s"), *Tag.ToString());
-				GEngine->AddOnScreenDebugMessage(-1, 8.f, FColor::Blue, Msg);
+				FGameplayTag MessageTag = FGameplayTag::RequestGameplayTag(FName("Message"));
+				// Note: Returns true match because "Message.HealthPotion".Matches("Message")
+				// is a subchain of Message and thus still a message.  If you reverse those, that 
+				// would NOT be true.  A message isn't a message.healthpotion.
 
-				FUIWidgetRow* Row = GetDataTableRowByTag<FUIWidgetRow>(MessageWidgetDataTable, Tag);
+				if (Tag.MatchesTag(MessageTag))
+				{
+					const FUIWidgetRow* Row = GetDataTableRowByTag<FUIWidgetRow>(MessageWidgetDataTable, Tag);
+					MessageWidgetRowDelegate.Broadcast(*Row);
+				}
 			}
 		}
-		);
+	);
 }
 
 void UOverlayWidgetController::HealthChanged(const FOnAttributeChangeData& Data) const

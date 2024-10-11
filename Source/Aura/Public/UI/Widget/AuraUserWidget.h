@@ -6,15 +6,10 @@
 #include "Blueprint/UserWidget.h"
 #include "AuraUserWidget.generated.h"
 
-/**
- * 
- */
 UCLASS(Blueprintable)
 class AURA_API UAuraUserWidget : public UUserWidget
 {
 	GENERATED_BODY()
-
-	
 
 public:
 	UFUNCTION(BlueprintCallable)

@@ -6,6 +6,7 @@
 #include "AbilitySystem/AuraAbilitySystemComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Player/AuraPlayerState.h"
+#include "AbilitySystemComponent.h"
 #include "UI/HUD/AuraHUD.h"
 
 AAuraCharacter::AAuraCharacter()
@@ -45,5 +46,13 @@ void AAuraCharacter::InitAbilityActorInfo()
 	{
 		HUD->InitOverlay(Cast<APlayerController>(GetController()), AuraPlayerState, AbilitySystemComponent, AttributeSet);
 	}
-	
+	InitializePrimaryAttributes();	
+}
+
+void AAuraCharacter::InitializePrimaryAttributes() const
+{
+	check(IsValid(AbilitySystemComponent));
+	check(DefaultPrimaryAttributes);
+	FGameplayEffectSpecHandle SpecHandle = GetAbilitySystemComponent()->MakeOutgoingSpec(DefaultPrimaryAttributes, 1.f, GetAbilitySystemComponent()->MakeEffectContext());
+	GetAbilitySystemComponent()->ApplyGameplayEffectSpecToTarget(*SpecHandle.Data.Get(), GetAbilitySystemComponent());
 }

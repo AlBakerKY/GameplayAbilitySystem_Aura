@@ -13,7 +13,7 @@ class AURA_API AAuraCharacterBase : public ACharacter, public IAbilitySystemInte
 {
 	GENERATED_BODY()
 
-public:
+public:	
 	AAuraCharacterBase();
 
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;

@@ -24,7 +24,14 @@ public:
 	UPROPERTY()
 	AAuraPlayerState* AuraPlayerState;
 
+protected:
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Attributes")
+	TSubclassOf<UGameplayEffect> DefaultPrimaryAttributes;
+
+	void InitializePrimaryAttributes() const;
+	
 private:
 	virtual void InitAbilityActorInfo() override;
+
 	
 };

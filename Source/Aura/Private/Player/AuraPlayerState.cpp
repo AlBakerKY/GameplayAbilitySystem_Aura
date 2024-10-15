@@ -31,4 +31,5 @@ UAbilitySystemComponent* AAuraPlayerState::GetAbilitySystemComponent() const
 
 void AAuraPlayerState::OnRep_Level(int32 OldLevel)
 {
+	
 }

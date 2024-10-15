@@ -1,12 +1,13 @@
-// Copyright Al Learning
+// Copyright Druid Mechanics
 
 
 #include "Character/AuraCharacter.h"
 
+#include "AbilitySystemComponent.h"
 #include "AbilitySystem/AuraAbilitySystemComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Player/AuraPlayerController.h"
 #include "Player/AuraPlayerState.h"
-#include "AbilitySystemComponent.h"
 #include "UI/HUD/AuraHUD.h"
 
 AAuraCharacter::AAuraCharacter()
@@ -24,47 +25,41 @@ AAuraCharacter::AAuraCharacter()
 void AAuraCharacter::PossessedBy(AController* NewController)
 {
 	Super::PossessedBy(NewController);
+
+	// Init ability actor info for the Server
 	InitAbilityActorInfo();
 }
 
 void AAuraCharacter::OnRep_PlayerState()
 {
 	Super::OnRep_PlayerState();
+
+	// Init ability actor info for the Client
 	InitAbilityActorInfo();
 }
 
 int32 AAuraCharacter::GetPlayerLevel()
 {
-	AAuraPlayerState* AuraPlayerStateTemp = GetPlayerState<AAuraPlayerState>();
-	check(AuraPlayerStateTemp);
-	return AuraPlayerStateTemp->GetPlayerLevel();
+	const AAuraPlayerState* AuraPlayerState = GetPlayerState<AAuraPlayerState>();
+	check(AuraPlayerState);
+	return AuraPlayerState->GetPlayerLevel();
 }
 
 void AAuraCharacter::InitAbilityActorInfo()
 {
-	AuraPlayerState = GetPlayerState<AAuraPlayerState>();
+	AAuraPlayerState* AuraPlayerState = GetPlayerState<AAuraPlayerState>();
 	check(AuraPlayerState);
 	AuraPlayerState->GetAbilitySystemComponent()->InitAbilityActorInfo(AuraPlayerState, this);
 	Cast<UAuraAbilitySystemComponent>(AuraPlayerState->GetAbilitySystemComponent())->AbilityActorInfoSet();
 	AbilitySystemComponent = AuraPlayerState->GetAbilitySystemComponent();
 	AttributeSet = AuraPlayerState->GetAttributeSet();
-	AAuraHUD* HUD = Cast<AAuraHUD>(GetWorld()->GetFirstPlayerController()->GetHUD());
-	if (HUD != nullptr)
+
+	if (AAuraPlayerController* AuraPlayerController = Cast<AAuraPlayerController>(GetController()))
 	{
-		HUD->InitOverlay(Cast<APlayerController>(GetController()), AuraPlayerState, AbilitySystemComponent, AttributeSet);
+		if (AAuraHUD* AuraHUD = Cast<AAuraHUD>(AuraPlayerController->GetHUD()))
+		{
+			AuraHUD->InitOverlay(AuraPlayerController, AuraPlayerState, AbilitySystemComponent, AttributeSet);
+		}
 	}
-	InitializePrimaryAttributes();	
-}
-
-void AAuraCharacter::InitializePrimaryAttributes() const
-{
-	check(IsValid(AbilitySystemComponent));
-	check(DefaultPrimaryAttributes);
-	FGameplayEffectSpecHandle PrimarySpecHandle = GetAbilitySystemComponent()->MakeOutgoingSpec(DefaultPrimaryAttributes, 1.f, GetAbilitySystemComponent()->MakeEffectContext());
-	GetAbilitySystemComponent()->ApplyGameplayEffectSpecToTarget(*PrimarySpecHandle.Data.Get(), GetAbilitySystemComponent());
-
-	check(DefaultSecondaryAttributes);
-	FGameplayEffectSpecHandle SecondarySpecHandle = GetAbilitySystemComponent()->MakeOutgoingSpec(DefaultSecondaryAttributes, 1.f, GetAbilitySystemComponent()->MakeEffectContext());
-	GetAbilitySystemComponent()->ApplyGameplayEffectSpecToTarget(*SecondarySpecHandle.Data.Get(), GetAbilitySystemComponent());
-	
+	InitializeDefaultAttributes();
 }

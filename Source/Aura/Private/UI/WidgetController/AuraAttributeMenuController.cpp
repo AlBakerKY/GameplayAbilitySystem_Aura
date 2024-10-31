@@ -10,3 +10,4 @@ void UAuraAttributeMenuController::BroadcastInitialValues()
 void UAuraAttributeMenuController::BindCallbacksToDependencies()
 {
 }
+	

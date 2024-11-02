@@ -6,6 +6,7 @@
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "AuraAbilitySystemLibrary.generated.h"
 
+class UAuraAttributeMenuController;
 /**
  * 
  */
@@ -16,5 +17,6 @@ class AURA_API UAuraAbilitySystemLibrary : public UBlueprintFunctionLibrary
 
 	UFUNCTION(BlueprintPure, Category="NN_AbilitySystemBlueprintLibrary")
 	static UOverlayWidgetController* GetOverlayWidgetController(const UObject* WorldContextObject);
-		
+	UFUNCTION(BlueprintPure, Category="NN_AbilitySystemBlueprintLibrary")
+	static UAuraAttributeMenuController* GetAuraAttributeMenuController(const UObject* WorldContextObject);
 };

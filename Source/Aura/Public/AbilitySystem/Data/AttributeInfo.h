@@ -27,7 +27,7 @@ struct FAuraAttributeInfo
 };
 
 /**
- * 
+ *	This is the data that is ultimately broadcast for viewing in the attribute menu. 
  */
 UCLASS()
 class AURA_API UAttributeInfo : public UDataAsset

@@ -9,6 +9,8 @@
 
 // AU 101
 
+// class UAuraAbilitySystemComponent;
+
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class AURA_API UAuraInputComponent : public UEnhancedInputComponent
 {

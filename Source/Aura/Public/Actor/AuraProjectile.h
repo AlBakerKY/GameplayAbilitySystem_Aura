@@ -6,7 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "AuraProjectile.generated.h"
 
-class USphereComponent;
+class USphereComponent ;
 class UProjectileMovementComponent;
 
 UCLASS()

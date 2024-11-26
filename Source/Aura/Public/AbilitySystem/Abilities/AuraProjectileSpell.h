@@ -23,4 +23,7 @@ protected:
 
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<AAuraProjectile> Projectile;
+
+	UFUNCTION(BlueprintCallable)
+	void FireProjectile();
 };

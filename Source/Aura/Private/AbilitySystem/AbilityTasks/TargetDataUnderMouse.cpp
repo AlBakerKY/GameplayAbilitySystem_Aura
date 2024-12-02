@@ -23,13 +23,20 @@ void UTargetDataUnderMouse::Activate()
 	if (bIsLocallyControlled)
 	{
 		SendMouseCursorData();
-		
-	} else
-	{
-			// TODO: We are on the server, responsd to uploaded cursor data
 	}
-
-	
+	else
+	{
+		const FGameplayAbilitySpecHandle SpecHandle = GetAbilitySpecHandle();
+		const FPredictionKey ActivationPredictionKey = GetActivationPredictionKey();
+		AbilitySystemComponent.Get()->AbilityTargetDataSetDelegate(SpecHandle, ActivationPredictionKey).AddUObject(
+			this, &UTargetDataUnderMouse::OnTargetReplicatedCallback);
+		// bCalled delegate is telling the server whether or not play data has arrived
+		const bool bCalledDelegate = AbilitySystemComponent.Get()->CallReplicatedTargetDataDelegatesIfSet(SpecHandle, ActivationPredictionKey);
+		if (!bCalledDelegate)
+		{
+			SetWaitingOnRemotePlayerData();
+		}
+	}
 }
 
 void UTargetDataUnderMouse::SendMouseCursorData()
@@ -53,9 +60,17 @@ void UTargetDataUnderMouse::SendMouseCursorData()
 
 	if (ShouldBroadcastAbilityTaskDelegates())
 	{
-		ValidData.Broadcast(HitResult.Location);
+		ValidData.Broadcast(DataHandle);
 	}
+}
 
-	
-	
+// This will be called only when receiving target data from the clients
+void UTargetDataUnderMouse::OnTargetReplicatedCallback(const FGameplayAbilityTargetDataHandle& DataHandle,
+                                                       FGameplayTag ActivationTag)
+{
+		AbilitySystemComponent->ConsumeClientReplicatedTargetData(GetAbilitySpecHandle(), GetActivationPredictionKey());
+	if (ShouldBroadcastAbilityTaskDelegates())
+	{
+		ValidData.Broadcast(DataHandle);
+	}
 }

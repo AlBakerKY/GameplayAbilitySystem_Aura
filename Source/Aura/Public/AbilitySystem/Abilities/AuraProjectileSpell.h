@@ -25,5 +25,5 @@ protected:
 	TObjectPtr<AAuraProjectile> Projectile;
 
 	UFUNCTION(BlueprintCallable)
-	void FireProjectile();
+	void SpawnProjectile(const FVector& ProjectileTargetLocation);
 };

@@ -7,7 +7,7 @@
 #include "CombatInterface.generated.h"
 
 // This class does not need to be modified.
-UINTERFACE()
+UINTERFACE(NotBlueprintable)
 class UCombatInterface : public UInterface
 {
 	GENERATED_BODY()
@@ -28,4 +28,7 @@ public:
 	{
 		return FVector();
 	}
+
+	UFUNCTION(BlueprintCallable)
+	virtual void SetFacingTargetLocation(FName WarpTargetName, FVector TargetLocation);
 };

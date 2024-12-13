@@ -37,8 +37,6 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Combat")
 	TObjectPtr<USkeletalMeshComponent> Weapon;
 
-	
-
 	virtual FVector GetCombatSocketLocation() override;
 
 	UFUNCTION(BlueprintCallable)

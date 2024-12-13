@@ -47,4 +47,5 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<UAuraAttributeMenuController> AuraAttributeMenuControllerClass;
+
 };
